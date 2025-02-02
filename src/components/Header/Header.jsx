@@ -1,42 +1,96 @@
-import React from "react";
-import Logo from "../../components/Header/Logo";
+import React, { useState, useEffect } from "react";
+import { AppBar, Toolbar, Box, Link } from "@mui/material";
+import { useTheme } from "@mui/material";
+import logo from "../../assets/images/logo.svg";
 
 const Header = () => {
-  return (
-    <header style={styles.header}>
-      <Logo />
-      <nav style={styles.nav}>
-        <a href="#login" style={styles.link}>
-          Login
-        </a>
-        <a href="#register" style={styles.link}>
-          Register
-        </a>
-      </nav>
-    </header>
-  );
-};
+  const theme = useTheme(); // this is a hook
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  // window.innerWidth is the initial window witdth
 
-const styles = {
-  header: {
-    width: "704px",
-    height: "44px",
-    top: "20px",
-    left: "32px",
-    display: "flex",  // Align logo and nav horizontally
-    justifyContent: "space-between",  // Space between logo and nav
-    alignItems: "center",  // Center items vertically
-    opacity: 1,  // Make sure the header is visible
-  },
-  nav: {
-    display: "flex",  // Arrange links in a row
-    gap: "20px",  // Add space between the links
-  },
-  link: {
-    textDecoration: "none",  // Remove underline from links
-    color: "#000",  // Minimal black color for links (you can customize it)
-    fontSize: "14px",  // Adjust font size for minimal look
-  },
+  // detect screen size changes with useEffect
+  useEffect(() => {
+    const handleResize = () => setScreenWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const isMobile = screenWidth <= 600;
+  const isTablet = screenWidth > 600 && screenWidth <= 1024;
+
+  return (
+    <AppBar
+      position="static"
+      sx={{
+        backgroundColor: theme.palette.background.default,
+        height: isMobile ? "60px" : isTablet ? "70px" : "80px",
+        padding: isMobile ? "10px" : "20px",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        overflow: "hidden",
+      }}
+    >
+      <Toolbar
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          width: "100%",
+        }}
+      >
+        <Box
+          component="img"
+          src={logo}
+          alt="Logo"
+          sx={{
+            width: isMobile ? "100px" : isTablet ? "140px" : "167px",
+            height: isMobile ? "35px" : isTablet ? "50px" : "60px",
+          }}
+        />
+        {/* links */}
+        <Box
+          sx={{
+            display: "flex",
+            gap: "12px",
+            flexDirection: isMobile ? "row" : "row",
+            alignItems: "center",
+            marginLeft: "auto",
+          }}
+        >
+          <Link
+            href="/login"
+            underline="none"
+            sx={{
+              color: theme.palette.secondary.main,
+              fontSize: isMobile ? "12px" : isTablet ? "14px" : "16px",
+              fontWeight: "700",
+              transition: "color 0.3s ease-in-out",
+              "&:hover": {
+                color: theme.palette.primary.main,
+              },
+            }}
+          >
+            LOG IN
+          </Link>
+          <Link
+            href="/register"
+            underline="none"
+            sx={{
+              color: theme.palette.secondary.main,
+              fontSize: isMobile ? "12px" : isTablet ? "14px" : "16px",
+              fontWeight: "700",
+              transition: "color 0.3s ease-in-out",
+              "&:hover": {
+                color: theme.palette.primary.main,
+              },
+            }}
+          >
+            REGISTRATION
+          </Link>
+        </Box>
+      </Toolbar>
+    </AppBar>
+  );
 };
 
 export default Header;

@@ -1,10 +1,10 @@
 import React from "react";
-import { useTheme } from "@mui/material/style";
+import { useTheme } from "@mui/material/styles";
 import { Button } from "@mui/material";
 
 const CustomButton = ({
   type = "primary",
-  size = "medium",
+  size = "small",
   onClick,
   children,
 }) => {
@@ -24,19 +24,14 @@ const CustomButton = ({
     common: {
       width: "182px",
       height: " 44px",
-      borderRadius: "30px 0px 0px 0px",
+      borderRadius: "30px 30px 30px 30px",
       fontFamily: theme.typography.fontFamily,
-      fontSize: "16px",
+      fontSize: "12px",
       cursor: "pointer",
-      transition: "0.3s ease-in-out",
-      "&:hoover": {
-        backgroundColor:
-          type === "primary" ? theme.palette.primary.dark : "#FFF5F0",
-      },
     },
   };
   return (
-    <Button>
+    <Button
       size={size}
       onClick= {onClick}
       style=
@@ -44,7 +39,8 @@ const CustomButton = ({
         ...styles.common,
         ...styles[type],
       }}
-      {children}
+    >
+    {children}
     </Button>
   );
 };

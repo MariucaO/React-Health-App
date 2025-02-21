@@ -26,7 +26,7 @@ const Header = () => {
         height: isMobile ? "60px" : isTablet ? "70px" : "80px",
         padding: isMobile ? "10px" : "20px",
         display: "flex",
-        justifyContent: "space-between",
+        justifyContent: isMobile ? 'center' : 'flex-start',
         alignItems: "center",
         overflow: "hidden",
       }}
@@ -34,7 +34,8 @@ const Header = () => {
       <Toolbar
         sx={{
           display: "flex",
-          justifyContent: "space-between",
+          justifyContent: isMobile ? 'center' : 'flex-start',
+          alignItems: 'center',
           width: "100%",
         }}
       >
@@ -52,9 +53,11 @@ const Header = () => {
           sx={{
             display: "flex",
             gap: "12px",
-            flexDirection: isMobile ? "row" : "row",
-            alignItems: "center",
-            marginLeft: "auto",
+            alignItems: 'center', 
+            marginLeft:  isTablet? 'auto' : isMobile ? '0' : '20px',
+            justifyContent: isMobile?  "center" : 'flex-start',
+            width: isMobile? '100%' : 'auto',  
+           
           }}
         >
           <Link

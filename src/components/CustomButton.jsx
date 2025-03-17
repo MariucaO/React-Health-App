@@ -1,47 +1,19 @@
 import React from "react";
-import { useTheme } from "@mui/material/styles";
-import { Button } from "@mui/material";
 
-const CustomButton = ({
-  type = "primary",
-  size = "small",
-  onClick,
-  children,
-}) => {
-  const theme = useTheme();
-  const styles = {
-    primary: {
-      backgroundColor: theme.palette.primary.main,
-      color: theme.palette.primary.contrastText,
-      border: "none",
-      boxShadow: "0px 4px 10px 0px #FC842D80",
-    },
-    secondary: {
-      backgroundColor: "#FFFFFF",
-      color: theme.palette.primary.main,
-      border: "2px solid #FC842D ",
-    },
-    common: {
-      width: "182px",
-      height: " 44px",
-      borderRadius: "30px 30px 30px 30px",
-      fontFamily: theme.typography.fontFamily,
-      fontSize: "12px",
-      cursor: "pointer",
-    },
-  };
+const CustomButton = ({ children, onClick, type, size }) => {
+  const buttonSize = (size = "small" ? "px-4 py-2" : "px-6 py-3");
+  const buttonColor =
+    type === "primary"
+      ? "bg-orange-500 text-white"
+      : "bg-white text-orange-500 border-orange-500";
+
   return (
-    <Button
-      size={size}
-      onClick= {onClick}
-      style=
-      {{
-        ...styles.common,
-        ...styles[type],
-      }}
+    <button
+      onClick={onClick}
+      className={`rounded-lg ${buttonSize} ${buttonColor} hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-blue-500`}
     >
-    {children}
-    </Button>
+      {children}
+    </button>
   );
 };
 

@@ -1,86 +1,48 @@
-import React, { useState } from "react";
-import {
-  TextField,
-  RadioGroup,
-  FormControlLabel,
-  FormLabel,
-  Radio,
-  Box,
-  Grid2,
-} from "@mui/material";
-import CustomButton from "../components/CustomButton";
+import React from "react";
 
-const ReusableForm = ({ fields, onSubmit, buttonLabel }) => {
-  const initialState = (fields || []).reduce((acc, field) => {
-    acc[field.name] = "";
-    return acc;
-  }, {});
-
-  const [formData, setFormData] = useState(initialState);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
+const ReusableForm = ({ fields, onSubmit }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(formData);
+    const formData = new FormData(e.target);
+    let formObject = {};
+    formData.forEach((value, key) => {
+      formObject[key] = value;
+    });
+    onSubmit(formObject);
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      {/* Loop through fields to render inputs */}
-      <Grid2 container spacing={2}>
-        {fields.map((field) => {
-          if (field.type === "radio") {
-            // Render radio buttons only if the type is 'radio'
-            return (
-              <Grid2 item xs={12} key={field.name}>
-                <Box mt={2}>
-                  <FormLabel component="legend">{field.label}</FormLabel>
-                  <RadioGroup
-                    row
+    <form onSubmit={handleSubmit} className="space-y-4 w-full">
+      {fields.map((field) => (
+        <div key={field.name} className="flex flex-col">
+          <label htmlFor={field.name} className="text-lg mb-2">
+            {field.label}
+          </label>
+          {field.type === "number" && (
+            <input
+              id={field.name}
+              name={field.name}
+              type="number"
+              className="p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          )}
+          {field.type === "radio" && (
+            <div className="flex space-x-4">
+              {field.options.map((option) => (
+                <label key={option} className="flex items-center space-x-2">
+                  <input
+                    type="radio"
                     name={field.name}
-                    value={formData[field.name]}
-                    onChange={handleInputChange}
-                  >
-                    <FormControlLabel value="A" control={<Radio />} label="A" />
-                    <FormControlLabel value="B" control={<Radio />} label="B" />
-                    <FormControlLabel value="O" control={<Radio />} label="O" />
-                    <FormControlLabel value="AB" control={<Radio />} label="AB" />
-                  </RadioGroup>
-                </Box>
-              </Grid2>
-            );
-          }
-
-          // For non-radio fields, render TextField
-          return (
-            <Grid2 item xs={12} md={6} key={field.name}>
-              <TextField
-                label={field.label}
-                name={field.name}
-                value={formData[field.name]}
-                onChange={handleInputChange}
-                fullWidth
-                required
-                margin="none"
-                type={field.type || "text"}
-                variant="standard"
-              />
-            </Grid2>
-          );
-        })}
-      </Grid2>
-
-      {/* Submit Button */}
-      <Box mt={3}>
-        <CustomButton type="submit">{buttonLabel}</CustomButton>
-      </Box>
+                    value={option}
+                    className="focus:ring-2 focus:ring-blue-500"
+                  />
+                  <span>{option}</span>
+                </label>
+              ))}
+            </div>
+          )}
+        </div>
+      ))}
     </form>
   );
 };
